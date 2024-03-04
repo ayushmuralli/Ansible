@@ -1,0 +1,13 @@
+---
+- name: add user
+  hosts: all_server
+  become: true
+  tasks: 
+    - name: Add user name ayush
+      user:
+        name: ayush
+        comment: ayush ayush
+        uid: 1050
+        group: tss
+        shell: /bin/sh
+        home: /ayush_dr

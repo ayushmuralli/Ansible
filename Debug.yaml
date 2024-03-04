@@ -1,0 +1,14 @@
+---
+- name: playbook to display a message in all clinte using debug module
+  hosts: all_server
+  tasks: 
+    - name: Display Welcome Message for Web
+      debug: 
+        msg: "Welcome home!"
+      when: "'webserver' in group_names"
+    - name: Display Goodbye Message for Database Group
+      debug:
+        msg: "Goodbye!"
+      when: "'dbserver' in group_names"
+
+

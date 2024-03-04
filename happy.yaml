@@ -1,0 +1,21 @@
+---
+- name: playbook to create a database and user
+  hosts: dbserver
+  gather_facts: false
+  tasks:
+    - name: create a database 
+      mysql_db:
+        name: ansibledb1
+        state: present
+        login_user: root
+        login_password: 'root'
+        login_unix_socket: /var/lib/mysql/mysql.sock 
+    - name: create a user name happydb
+      mysql_user:
+        name: happyuser
+        password: 1234
+        priv: '*.*:ALL'
+        state: present
+        login_user: root
+        login_password: ''
+        login_unix_socket: /var/lib/mysql/mysql.sock 

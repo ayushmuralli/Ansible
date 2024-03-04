@@ -1,0 +1,52 @@
+---
+- name: Install and configure HTTP/HTTPS services
+  hosts: webserver
+  become: true
+
+  tasks:
+    - name: Install httpd
+      package:
+        name: httpd 
+        state: present
+
+    - name: Enable and start httpd
+      service: 
+        name: httpd 
+        enabled: yes
+        state: started
+
+    - name: Add HTTP and HTTPS service to firewall
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+    - name: Add HTTPS service to firewall
+      firewalld: 
+        service: https
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: copy index.html 
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+- name: install mysql-server in db server
+  hosts: dbserver
+  tasks:
+    - name: install sql server
+      yum: 
+        name: mysql-server
+        state: present
+
+    - name: start and enable service
+      service:
+        name: mysqld
+        state: started
+        enabled: yes
+
+
+           

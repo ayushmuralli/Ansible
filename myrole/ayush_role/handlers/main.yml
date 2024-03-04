@@ -1,0 +1,12 @@
+---
+# handlers file for ayush_role
+  - name: restart alma
+    service:
+      name: chronyd
+      state: restarted
+    when: ansible_distribution == "AlmaLinux"
+  - name: restart ubuntu
+    service:
+      name: ntp
+      state: restarted
+    when: ansible_distribution == "Ubuntu"

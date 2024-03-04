@@ -1,0 +1,55 @@
+---
+# tasks file for ayush_role
+  - name: Install ntp in alma linux
+    yum:
+      name: "{{ item }}"
+      state: present
+    when: ansible_distribution == "AlmaLinux"
+    loop:
+      - chrony
+      - wget
+      - git
+      - curl
+
+  - name: install ntp in ubantu
+    apt: 
+      name: "{{ item }}"
+      state: present
+    when: ansible_distribution == "Ubuntu"
+    loop:
+      - ntp
+      - wget
+      - git
+      - curl
+  - name: enable and start service in alma server
+    service:
+      name: chronyd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "AlmaLinux"
+
+  - name: enable and start service in ubuntu server
+    service:
+      name: ntp
+      state: started
+      enabled: yes
+    when: ansible_distribution == "Ubuntu"
+  - name: this is banner file
+    copy:
+      content: 'this server is managed by ansible'
+      dest: /etc/motd
+  - name: deploy configuration in ubuntu
+    template: 
+      src: template/ntp_ubuntu
+      dest: /etc/ntp.conf
+    when: ansible_distribution == "Ubuntu"
+    notify:
+      - restart ubuntu
+
+  - name: deploy configuration in alma
+    template:
+      src: template/ntp_alma
+      dest: /etc/chrony.conf
+    when: ansible_distribution == "AlmaLinux"
+    notify:
+      - restart alma

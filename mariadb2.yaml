@@ -1,0 +1,35 @@
+---
+- name: ctreate a playbook to create datatbase name app_db
+  hosts: dbserver
+  vars: 
+    dbname: db01
+    dbuser: user1
+    dbpass: asd123.
+  tasks:
+    - name: install mariadb service
+      yum:
+        name: mariadb-server
+        state: present
+    - name: start and enable mariadb server
+      service:
+        name: mariadb
+        enabled: yes
+        state: started
+    - name: create database inside mariadb
+      mysql_db:
+        name: "{{ dbname }}"
+        state: present
+        login_user: root
+        login_password: ''
+        login_unix_socket: /var/lib/mysql/mysql.sock
+    - name: create a user name happydb
+      mysql_user:
+        name: "{{ dbuser }}"
+        password: "{{ dbpass }}"
+        priv: '*.*:ALL'
+        login_user: root
+        login_password: ''
+        login_unix_socket: /var/lib/mysql/mysql.sock
+    - name: display output using debug madule - variables
+      debug:
+        msg: user created with name {{dbuser}}, database created with name {{ dbname }}

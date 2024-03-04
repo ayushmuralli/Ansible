@@ -1,0 +1,24 @@
+---
+- name : playbook to install and configure mariadb
+  hosts: dbserver
+  tasks:
+    - name: install mariadb service
+      yum: 
+        name: mariadb-server
+        state: present
+    - name: install python module for sql
+      yum: 
+        name: python3-PyMySQL
+        state: present
+    - name: start and enable mariadb server
+      service:
+        name: mariadb
+        enabled: no
+        state: stopped
+    - name: create database inside mariadb
+      mysql_db:
+        name: ansibledb1
+        state: present
+        login_user: root
+        login_password: ''
+        login_unix_socket: /var/lib/mysql/mysql.sock

@@ -1,0 +1,5 @@
+---
+- name: Install ntp to all server
+  hosts: all_server
+  roles:
+    - ayush_role 
